@@ -7,6 +7,8 @@
  */
 
 //no direct access
+use Joomla\CMS\Factory;
+
 defined('_JEXEC') or die ('Restricted Access');
 
 jimport('joomla.plugin.plugin');
@@ -95,10 +97,14 @@ class plgContentQlaudio extends JPlugin
         if (1 == $this->params->get('jquery', 0)) {
             JHtml::_('jquery.framework');
         }
-        JHtml::script('plg_content_qlaudio/qlaudio.js', false, true);
+
+        $app = Factory::getApplication();
+        $wa = $app->getDocument()->getWebAssetManager();
+        $wa->registerAndUseScript('qlaudio', 'media/plugins/plg_content_qlaudio/qlaudio.js', [], ['defer' => true], ['qlaudio']);
+
 
         // stylesheets
-        JHtml::stylesheet('plg_content_qlaudio/qlaudio.css', false, true, false);
+        JHtml::_('stylesheet', 'plg_content_qlaudio/qlaudio.css', ['relative' => true]);
         if (1 == $this->params->get('addStyles', 0)) {
             JFactory::getDocument()->addStyleDeclaration($this->setStyles());
         }

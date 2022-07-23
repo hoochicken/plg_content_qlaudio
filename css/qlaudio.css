@@ -7,3 +7,4 @@
 
 .qlaudio .qlaudio-item {cursor:pointer;}
 .qlaudio .qlaudio-item:hover, .qlaudio .qlaudio-item.active {font-weight: bold;}
+.qlaudio audio {width:100%; border-radius: 0;}
