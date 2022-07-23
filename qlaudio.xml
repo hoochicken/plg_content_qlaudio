@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="1.0.1" group="content" method="upgrade">
+    <name>PLG_CONTENT_QLAUDIO</name>
+    <author>Ingo Holewczuk; Mareike Riegel</author>
+    <creationDate>03. June 2020</creationDate>
+    <copyright>Copyright (C) 2020 ql.de All rights reserved.</copyright>
+    <authorEmail>mareike.riegel@ql.de</authorEmail>
+    <authorUrl>http://www.ql.de/</authorUrl>
+    <version>1.1.3</version>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <description>PLG_CONTENT_QLAUDIO_DESCRIPTION</description>
+    <files>
+        <filename plugin="qlaudio">qlaudio.php</filename>
+        <filename plugin="qlaudio">index.html</filename>
+        <filename plugin="qlaudio">license.txt</filename>
+        <folder plugin="qlaudio">css</folder>
+        <folder plugin="qlaudio">js</folder>
+        <folder plugin="qlaudio">language</folder>
+        <folder plugin="qlaudio">tmpl</folder>
+    </files>
+    <media folder="media" destination="plg_content_qlaudio">
+        <folder>css</folder>
+        <folder>js</folder>
+    </media>
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.plg_content_qlaudio.ini</language>
+        <language tag="en-GB">language/en-GB/en-GB.plg_content_qlaudio.sys.ini</language>
+    </languages>
+	<config>
+		<fields name="params">
+            <fieldset name="basic">
+                <field name="jquery" type="radio"
+                       default="1"
+                       class="btn-group"
+                       label="PLG_CONTENT_QLAUDIO_JQUERY_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_JQUERY_DESC"
+                        >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="folderRoot" type="text" hint="e. g. images/audio"
+                       label="PLG_CONTENT_QLAUDIO_FOLDERROOT_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_FOLDERROOT_DESC" />
+                <field name="filesAllowed" type="list" multiple="true"
+                       label="PLG_CONTENT_QLAUDIO_FILESALLOWED_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_FILESALLOWED_DESC">
+                    <option value="mp3">mp3</option>
+                    <option value="wma">wma</option>
+                    <option value="wav">wav</option>
+                    <option value="ogg">ogg</option>
+                        </field>
+                <field name="autostart" type="radio"
+                       default="1"
+                       class="btn-group"
+                       label="PLG_CONTENT_QLAUDIO_AUTOSTART_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_AUTOSTART_DESC"
+                        >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="controls" type="radio"
+                       default="1"
+                       class="btn-group"
+                       label="PLG_CONTENT_QLAUDIO_CONTROLS_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_CONTROLS_DESC"
+                        >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+            </fieldset>
+            <fieldset name="files">
+                <field name="alterFileName" type="list"
+                       default=""
+                       multiple="true"
+                       class="btn-group"
+                       label="PLG_CONTENT_QLAUDIO_ALTERFILENAME_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_ALTERFILENAME_DESC"
+                        >
+                    <option value="">JNONE</option>
+                    <option value="ucwords">PLG_CONTENT_QLAUDIO_UCWORDS</option>
+                    <option value="nodash">PLG_CONTENT_QLAUDIO_NODASH</option>
+                    <option value="stripfileending">PLG_CONTENT_QLAUDIO_STRIPFILEENDING</option>
+                </field>
+                <field name="limit" type="text" default="20"
+                       label="PLG_CONTENT_QLAUDIO_LIMIT_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_LIMIT_DESC" />
+                <field name="filenameStrip" type="text" default="0"
+                       filter="integer"
+                       label="PLG_CONTENT_QLAUDIO_FILENAMESTRIP_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_FILENAMESTRIP_DESC" />
+            </fieldset>
+            <fieldset name="description">
+                <field name="usage" type="note"
+                       label="PLG_CONTENT_QLAUDIO_DESCRIPTION_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_DESCRIPTION_DESC"
+                        >
+                </field>
+            </fieldset>
+            <fieldset name="files">
+                <field name="alterFileName" type="list"
+                       default=""
+                       multiple="true"
+                       class="btn-group"
+                       label="PLG_CONTENT_QLAUDIO_ALTERFILENAME_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_ALTERFILENAME_DESC"
+                        >
+                    <option value="">JNONE</option>
+                    <option value="ucwords">PLG_CONTENT_QLAUDIO_UCWORDS</option>
+                    <option value="nodash">PLG_CONTENT_QLAUDIO_NODASH</option>
+                    <option value="stripfileending">PLG_CONTENT_QLAUDIO_STRIPFILEENDING</option>
+                </field>
+                <field name="limit" type="text" default="20"
+                       label="PLG_CONTENT_QLAUDIO_LIMIT_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_LIMIT_DESC" />
+                <field name="filenameStrip" type="text" default="0"
+                       filter="integer"
+                       label="PLG_CONTENT_QLAUDIO_FILENAMESTRIP_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_FILENAMESTRIP_DESC" />
+            </fieldset>
+            <fieldset name="display">
+                <field name="tag" type="list"
+                       default="div"
+                       class="btn-group"
+                       label="PLG_CONTENT_QLAUDIO_TAG_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_TAG_DESC"
+                        >
+                    <option value="div">div</option>
+                    <option value="ul">list (ul, li)</option>
+                </field>
+                <field name="headline" type="integer"
+                       first="1"
+                       last="6"
+                       step="1"
+                       default="4"
+                       class="btn-group"
+                       label="PLG_CONTENT_QLAUDIO_HEADLINE_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_HEADLINE_DESC"
+                        >
+                </field>
+                <field name="iconPlay" type="radio"
+                       default="1"
+                       class="btn-group"
+                       label="PLG_CONTENT_QLAUDIO_ICONPLAY_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_ICONPLAY_DESC"
+                        >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="layout" type="text" default="default"
+                       label="PLG_CONTENT_QLAUDIO_LAYOUT_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_LAYOUT_DESC" />
+                <field name="id" type="text" default=""
+                       label="PLG_CONTENT_QLAUDIO_ID_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_ID_DESC" />
+                <field name="class" type="text" default=""
+                       label="PLG_CONTENT_QLAUDIO_CLASS_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_CLASS_DESC" />
+                <field name="title" type="text" hint="Audio files"
+                       label="PLG_CONTENT_QLAUDIO_TITLE_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_TITLE_DESC" />
+            </fieldset>
+            <fieldset name="styles">
+                <field name="addStyles" type="radio"
+                       class="btn-group"
+                       label="PLG_CONTENT_QLAUDIO_ADDSTYLES_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_ADDSTYLES_DESC"
+                       default="0"
+                        >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="float" type="list"
+                       label="PLG_CONTENT_QLAUDIO_FLOAT_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_FLOAT_DESC"
+                       default="initial"
+                        >
+                    <option value="initial">PLG_CONTENT_QLAUDIO_INITIAL</option>
+                    <option value="left">PLG_CONTENT_QLAUDIO_LEFT</option>
+                    <option value="right">PLG_CONTENT_QLAUDIO_RIGHT</option>
+                    <option value="none">PLG_CONTENT_QLAUDIO_NONE</option>
+                </field>
+                <field name="background" type="color"
+                       label="PLG_CONTENT_QLAUDIO_BACKGROUND_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_BACKGROUND_DESC"
+                       default="#fef0f0"
+                        >
+                </field>
+                <field name="padding" type="integer"
+                       first="1" last="50" step="1"
+                       label="PLG_CONTENT_QLAUDIO_PADDING_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_PADDING_DESC"
+                       default="20"
+                        >
+                </field>
+
+                <field name="spacerBorder" type="spacer"
+                       first="0" last="50" step="1"
+                       label="PLG_CONTENT_QLAUDIO_BORDERSPACER_LABEL" />
+                <field name="borderRadius" type="integer"
+                       first="0" last="50" step="1"
+                       label="PLG_CONTENT_QLAUDIO_RADIUS_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_RADIUS_DESC"
+                       default="0"
+                        >
+                </field>
+                <field name="borderWidth" type="integer"
+                       first="1" last="20" step="1"
+                       label="PLG_CONTENT_QLAUDIO_WIDTH_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_WIDTH_DESC"
+                       default="1"
+                        >
+                </field>
+                <field
+                        name="borderStyle"
+                        type="list"
+                        label="PLG_CONTENT_QLAUDIO_STYLE_LABEL"
+                        description="PLG_CONTENT_QLAUDIO_STYLE_DESC"
+                        >
+                    <option value="solid">PLG_CONTENT_QLAUDIO_BORDERSTYLE_SOLID</option>
+                    <option value="dotted">PLG_CONTENT_QLAUDIO_BORDERSTYLE_DOTTED</option>
+                    <option value="dashed">PLG_CONTENT_QLAUDIO_BORDERSTYLE_DASHED</option>
+                    <option value="double">PLG_CONTENT_QLAUDIO_BORDERSTYLE_DOUBLE</option>
+                    <option value="ridge">PLG_CONTENT_QLAUDIO_BORDERSTYLE_RIDGE</option>
+                    <option value="inset">PLG_CONTENT_QLAUDIO_BORDERSTYLE_INSET</option>
+                    <option value="outset">PLG_CONTENT_QLAUDIO_BORDERSTYLE_OUTSET</option>
+                    <option value="groove">PLG_CONTENT_QLAUDIO_BORDERSTYLE_GROOVE</option>
+                </field>
+                <field name="borderColor" type="color"
+                       label="PLG_CONTENT_QLAUDIO_COLOR_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_COLOR_DESC"
+                       default="#fee0e0"
+                        />
+            </fieldset>
+		</fields>
+	</config>
+</extension>

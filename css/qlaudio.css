@@ -1,0 +1,9 @@
+/**
+ * @package     plg_content_qlaudio
+ *
+ * @copyright   Copyright (C) 2020 Mareike Riegel
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+.qlaudio .qlaudio-item {cursor:pointer;}
+.qlaudio .qlaudio-item:hover, .qlaudio .qlaudio-item.active {font-weight: bold;}
