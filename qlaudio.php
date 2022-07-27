@@ -1,7 +1,7 @@
 <?php
 /**
  * @package       plg_content_qlaudio
- * @copyright     Copyright (C) 2020 ql.de All rights reserved.
+ * @copyright     Copyright (C) 2022 ql.de All rights reserved.
  * @author        Mareike Riegel mareike.riegel@ql.de
  * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
@@ -98,9 +98,10 @@ class plgContentQlaudio extends JPlugin
             JHtml::_('jquery.framework');
         }
 
-        $app = Factory::getApplication();
-        $wa = $app->getDocument()->getWebAssetManager();
-        $wa->registerAndUseScript('qlaudio', 'media/plugins/plg_content_qlaudio/qlaudio.js', [], ['defer' => true], ['qlaudio']);
+        // $app = Factory::getApplication();
+        // $wa = $app->getDocument()->getWebAssetManager();
+        // $wa->registerAndUseScript('qlaudio', 'media/plg_content_qlaudio/js/qlaudio.js', [], ['defer' => true], ['qlaudio']);
+        JHtml::_('script', JUri::root() . 'media/plg_content_qlaudio/js/qlaudio.js');
 
 
         // stylesheets
