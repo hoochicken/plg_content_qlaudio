@@ -17,6 +17,6 @@
 		<maintainer>Dr. Mareike Riegel</maintainer>
 		<maintainerurl>http://ql.de</maintainerurl>
 		<section>Updates</section>
-		<targetplatform name="joomla" version="4.[0123456789]"/>
+		<targetplatform name="joomla" version="4.*"/>
 	 </update>
  </updates>
