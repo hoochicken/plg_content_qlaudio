@@ -26,7 +26,7 @@ jQuery(document).ready(function () {
     const loadNextFileAndPlay = () => {
         let objAudioplayer = jQuery('.qlaudio').find('audio');
         let currentAudio = objAudioplayer.find('source').attr('src');
-        let indexCurrent = fileList.indexOf(currentAudio) ;
+        let indexCurrent = fileList.indexOf(currentAudio);
         let indexNew = indexCurrent < fileList.length && indexCurrent !== -1 ? indexCurrent + 1 : 0;
 
         objAudioplayer.src = fileList[indexNew];

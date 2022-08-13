@@ -27,7 +27,7 @@
         <language tag="en-GB">language/en-GB/en-GB.plg_content_qlaudio.sys.ini</language>
     </languages>
     <updateservers>
-        <server type="extension" priority="1" name="qlaudio - Updates">https://raw.githubusercontent.com/hoochicken/plg_content_qlaudio/master/_jupdate/plg_content_qlaudio.xml</server>
+        <server type="extension" priority="1" name="qlaudio - Updates">https://raw.githubusercontent.com/hoochicken/plg_content_qlaudio/main/_jupdate/plg_content_qlaudio.xml</server>
     </updateservers>
 	<config>
 		<fields name="params">

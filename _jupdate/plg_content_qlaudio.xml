@@ -1,15 +1,15 @@
  <updates>
 	 <update>
-		<name>qltabs</name>
+		<name>qlaudio</name>
 		<client>site</client>
 		<type>plugin</type>
 		<folder>content</folder>
-		<element>qltabs</element>
-		<version>4.0.0</version>
-		<description>Content plugin for parsing text as markdown</description>
+		<element>qlaudio</element>
+		<version>2.0.0</version>
+		<description>qlaudio displays a list of audio files and a player</description>
 		<infourl title="ql.de - Blackforest Software">https://ql.de</infourl>
 		<downloads>
-			<downloadurl type="full" format="zip">https://github.com/hoochicken/plg_content_qltabs/archive/refs/tags/release-4.0.0.zip</downloadurl>
+			<downloadurl type="full" format="zip">https://github.com/hoochicken/plg_content_qlaudio/archive/refs/tags/release-2.0.0.zip</downloadurl>
 		</downloads>
 		<tags>
 			<tag>stable</tag>
