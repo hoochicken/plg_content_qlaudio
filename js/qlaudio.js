@@ -15,8 +15,8 @@ jQuery(document).ready(function () {
     {
         let fileListTemp = new Array;
         jQuery('.qlaudio-item').each(function () {
-            // console.log($(this))
-            fileListTemp.push($(this).attr('data-filename'));
+            // console.log(jQuery(this))
+            fileListTemp.push(jQuery(this).attr('data-filename'));
         });
         return fileListTemp;
     }
