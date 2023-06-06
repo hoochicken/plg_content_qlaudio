@@ -134,7 +134,7 @@ class plgContentQlaudio extends JPlugin
      * @return false|string
      * @throws Exception
      */
-    private function getHtml(int $counter, $data): bool|string
+    private function getHtml(int $counter, $data)
     {
         ob_start();
         $params = $this->params;
