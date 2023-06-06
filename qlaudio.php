@@ -180,7 +180,9 @@ class plgContentQlaudio extends JPlugin
                 }
                 $this->data->$k->states[$key] = $value;
             }
-            $folder = str_replace('//', '/', $this->data->$k->states['folderRoot'] . '/' . $this->data->$k->states['folder']);
+            $folder = $this->data->$k->states['folder'];
+            $folder = !empty($this->data->$k->states['folderRoot']) ? $this->data->$k->states['folderRoot'] . $folder : $folder;
+            $folder = str_replace('//', '/', $folder);
             $this->data->$k->files = $this->getFilesFromFolder($folder, $this->data->$k->states);
             //$this->printer($this->data);die;
             //$this->data->$k->files=$this->getFilesFromFolder($folder);
@@ -225,16 +227,26 @@ class plgContentQlaudio extends JPlugin
         $files = [];
         $i = 0;
         while (false !== ($file = readdir($dir))) {
-            $regex = implode('|', $arrFilesAllowed);
-            $regex = '/.+\.(' . $regex . ')$/i';
-            if (preg_match($regex, $file) && '.' != $file && '..' != $file) {
-                if (false !== filesize(JPATH_ROOT . '/' . $folder . '/' . $file)) {
-                    $files[$i]['path'] = '/' . $folder . '/' . $file;
-                    $fileAltered = $this->alterFilename($file, $arrAlterFileName, $numStripFilenameFront);
-                    $files[$i]['title'] = $fileAltered;
-                    $files[$i]['filename'] = $file;
+            if ($this->params->get('check_files', 1)) {
+                $regex = implode('|', $arrFilesAllowed);
+                $regex = '/.+\.(' . $regex . ')$/i';
+                if (!preg_match($regex, $file)) {
+                    continue;
                 }
             }
+
+            if ('.' === $file || '..' === $file) {
+                continue;
+            }
+            if (!filesize(JPATH_ROOT . '/' . $folder . '/' . $file)) {
+                continue;
+            }
+
+            $files[$i]['path'] = '/' . $folder . '/' . $file;
+            $fileAltered = $this->alterFilename($file, $arrAlterFileName, $numStripFilenameFront);
+            $files[$i]['title'] = $fileAltered;
+            $files[$i]['filename'] = $file;
+
             $i++;
         }
         closedir($dir);

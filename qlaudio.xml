@@ -2,11 +2,11 @@
 <extension type="plugin" version="1.0.1" group="content" method="upgrade">
     <name>PLG_CONTENT_QLAUDIO</name>
     <author>Ingo Holewczuk; Mareike Riegel</author>
-    <creationDate>03. June 2022</creationDate>
-    <copyright>Copyright (C) 2022 ql.de All rights reserved.</copyright>
+    <creationDate>2023-06-06</creationDate>
+    <copyright>Copyright (C) 2023 ql.de All rights reserved.</copyright>
     <authorEmail>mareike.riegel@ql.de</authorEmail>
-    <authorUrl>http://www.ql.de/</authorUrl>
-    <version>2.0.0</version>
+    <authorUrl>http://ql.de/</authorUrl>
+    <version>2.0.1</version>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <description>PLG_CONTENT_QLAUDIO_DESCRIPTION</description>
     <files>
@@ -44,14 +44,6 @@
                 <field name="folderRoot" type="text" hint="e. g. images/audio"
                        label="PLG_CONTENT_QLAUDIO_FOLDERROOT_LABEL"
                        description="PLG_CONTENT_QLAUDIO_FOLDERROOT_DESC" />
-                <field name="filesAllowed" type="list" multiple="true"
-                       label="PLG_CONTENT_QLAUDIO_FILESALLOWED_LABEL"
-                       description="PLG_CONTENT_QLAUDIO_FILESALLOWED_DESC">
-                    <option value="mp3">mp3</option>
-                    <option value="wma">wma</option>
-                    <option value="wav">wav</option>
-                    <option value="ogg">ogg</option>
-                        </field>
                 <field name="autostart" type="radio"
                        default="1"
                        class="btn-group"
@@ -69,6 +61,23 @@
                         >
                     <option value="1">JYES</option>
                     <option value="0">JNO</option>
+                </field>
+                <field name="check_files" type="radio"
+                       default="1"
+                       class="btn-group"
+                       label="PLG_CONTENT_QLAUDIO_CHECKFILES_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_CHECKFILES_DESC"
+                >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="filesAllowed" type="list" multiple="true"
+                       label="PLG_CONTENT_QLAUDIO_FILESALLOWED_LABEL"
+                       description="PLG_CONTENT_QLAUDIO_FILESALLOWED_DESC">
+                    <option value="mp3">mp3</option>
+                    <option value="wma">wma</option>
+                    <option value="wav">wav</option>
+                    <option value="ogg">ogg</option>
                 </field>
             </fieldset>
             <fieldset name="files">
@@ -195,7 +204,6 @@
                        default="20"
                         >
                 </field>
-
                 <field name="spacerBorder" type="spacer"
                        first="0" last="50" step="1"
                        label="PLG_CONTENT_QLAUDIO_BORDERSPACER_LABEL" />
