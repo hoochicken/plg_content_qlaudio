@@ -31,11 +31,17 @@ jQuery(document).ready(function () {
 
         objAudioplayer.src = fileList[indexNew];
         objAudioplayer.find('source').attr('src', fileList[indexNew]);
+        if ('undefined' === typeof(objAudioplayer[0])) {
+            return;
+        }
         objAudioplayer[0].play();
     };
 
     function initiateAudioListener() {
         let objAudioplayer = jQuery('.qlaudio').find('audio');
+        if ('undefined' === typeof(objAudioplayer[0])) {
+            return;
+        }
         objAudioplayer[0].addEventListener('ended', loadNextFileAndPlay);
     }
 
@@ -77,6 +83,9 @@ jQuery(document).ready(function () {
     {
         // set new source, reload audio element and play
         objAudioplayer.find('source').attr('src', strFilename);
+        if ('undefined' === typeof(objAudioplayer[0])) {
+            return;
+        }
         objAudioplayer[0].load();
         objAudioplayer[0].currentTime = 0;
         objAudioplayer[0].play();
