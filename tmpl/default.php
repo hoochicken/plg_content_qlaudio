@@ -46,12 +46,16 @@ if ('ul' == $params->get('tag', 'div')) {
         </h<?php echo $params->get('headline', 4); ?>>
     <?php endif; ?>
     <<?php echo $tag1; ?> class="qlaudioContainer navi">
-    <?php foreach ($data->files as $k => $v) : ?>
-    <<?php echo $tag2; ?> class="qlaudio-item" data-filename="<?php echo $v['path']; ?>">
-    <?php if (1 == $params->get('iconPlay', 1)) echo '<span class="icon-play"> </span>'; ?>
-    <?php echo $v['title']; ?>
-</<?php echo $tag2; ?>>
-<?php endforeach; ?>
+    <?php if (count($data->files) > 1) :
+        foreach ($data->files as $k => $v) : ?>
+        <<?php echo $tag2; ?> class="qlaudio-item" data-filename="<?php echo $v['path']; ?>">
+        <?php if (1 == $params->get('iconPlay', 1)) echo '<span class="icon-play"> </span>'; ?>
+        <?php echo $v['title']; ?>
+        </<?php echo $tag2; ?>>
+        <?php endforeach; ?>
+    <?php else :  ?>
+
+    <?php endif; ?>
 </<?php echo $tag1; ?>>
 <div class="qlaudioContainer player">
     <audio id="qlaudio_player<?php echo $counter; ?>" <?php echo $strAutoplay; ?> <?php echo $strControls; ?>

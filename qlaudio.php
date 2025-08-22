@@ -23,6 +23,7 @@ class plgContentQlaudio extends JPlugin
     protected string $str_call_start = 'qlaudio';
     protected array $arr_attributes = [
         'folder',
+        'file',
         'folderRoot',
         'limit',
         'layout',
@@ -38,6 +39,7 @@ class plgContentQlaudio extends JPlugin
     ];
     protected array $default = [
         'folder' => '',
+        'file' => '',
         'folderRoot' => '',
         'limit' => 20,
         'layout' => 'default',
@@ -112,6 +114,8 @@ class plgContentQlaudio extends JPlugin
 
         $this->setStates();
         $this->setData();
+
+        // replace for folder
         foreach ($this->data as $k => $v) {
             $v->message = false;
             if (!isset($v->files) || 0 >= count($v->files)) {
@@ -180,6 +184,18 @@ class plgContentQlaudio extends JPlugin
                 }
                 $this->data->$k->states[$key] = $value;
             }
+            $filePath = $this->data->$k->states['file'] ?? null;
+            if (!empty($filePath)) {
+                $filename = basename($filePath);
+                $fileData = [
+                    'path' => $filePath,
+                    'title' => $this->alterFilename($filename, $this->data->$k->states['alterFileName'] ?? [], $this->data->$k->states['filenameStrip'] ?? 0),
+                    'filename' => $filePath,
+                ];
+                $this->data->$k->files = [$fileData];
+                continue;
+            }
+
             $folder = $this->data->$k->states['folder'];
             $folder = !empty($this->data->$k->states['folderRoot']) ? $this->data->$k->states['folderRoot'] . $folder : $folder;
             $folder = str_replace('//', '/', $folder);
