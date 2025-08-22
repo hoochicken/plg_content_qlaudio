@@ -38,7 +38,9 @@ if (1 == $data->states['autostart']) {
 if ('ul' == $params->get('tag', 'div')) {
     $tag1 = 'ul';
     $tag2 = 'li';
-}; ?>
+}
+$strDefault = '/';
+?>
 <div id="<?php echo $id; ?>" class="qlaudio <?php echo $data->states['class']; ?>">
     <?php if ('' != $data->states['title']) : ?>
         <h<?php echo $params->get('headline', 4); ?>>
@@ -54,7 +56,9 @@ if ('ul' == $params->get('tag', 'div')) {
         </<?php echo $tag2; ?>>
         <?php endforeach; ?>
     <?php else :  ?>
-
+        <?php
+        $strDefault = $data->files[0]['path'];
+        ?>
     <?php endif; ?>
 </<?php echo $tag1; ?>>
 <div class="qlaudioContainer player">
