@@ -8,12 +8,17 @@
 
 //no direct access
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Uri\Uri;
 
 defined('_JEXEC') or die ('Restricted Access');
 
 jimport('joomla.plugin.plugin');
 
-class plgContentQlaudio extends JPlugin
+class plgContentQlaudio extends CMSPlugin
 {
 
     /*TODO
@@ -97,19 +102,19 @@ class plgContentQlaudio extends JPlugin
         // javascript
         $article->text = $this->clearTags($article->text);
         if (1 == $this->params->get('jquery', 0)) {
-            JHtml::_('jquery.framework');
+            // Html::_('jquery.framework');
         }
 
         // $app = Factory::getApplication();
         // $wa = $app->getDocument()->getWebAssetManager();
         // $wa->registerAndUseScript('qlaudio', 'media/plg_content_qlaudio/js/qlaudio.js', [], ['defer' => true], ['qlaudio']);
-        JHtml::_('script', JUri::root() . 'media/plg_content_qlaudio/js/qlaudio.js');
+        HTMLHelper::_('script', Uri::root() . 'media/plg_content_qlaudio/js/qlaudio.js');
 
 
         // stylesheets
-        JHtml::_('stylesheet', 'plg_content_qlaudio/qlaudio.css', ['relative' => true]);
+        HTMLHelper::_('stylesheet', 'plg_content_qlaudio/qlaudio.css', ['relative' => true]);
         if (1 == $this->params->get('addStyles', 0)) {
-            JFactory::getDocument()->addStyleDeclaration($this->setStyles());
+            Factory::getDocument()->addStyleDeclaration($this->setStyles());
         }
 
         $this->setStates();
@@ -119,12 +124,12 @@ class plgContentQlaudio extends JPlugin
         foreach ($this->data as $k => $v) {
             $v->message = false;
             if (!isset($v->files) || 0 >= count($v->files)) {
-                $v->message = JText::sprintf('PLG_CONTENT_QLAUDIO_MSG_NOFILESINFOLDERFOUND', $v->states['folderRoot'] . '/' . $v->states['folder']);
+                $v->message = Text::sprintf('PLG_CONTENT_QLAUDIO_MSG_NOFILESINFOLDERFOUND', $v->states['folderRoot'] . '/' . $v->states['folder']);
                 $strFilesAllowed = $v->states['filesAllowed'];
                 if (0 == count($strFilesAllowed)) {
-                    $strFilesAllowed = JText::_('PLG_CONTENT_QLAUDIO_NONE');
+                    $strFilesAllowed = Text::_('PLG_CONTENT_QLAUDIO_NONE');
                 }
-                $v->message .= '<br />' . JText::sprintf('PLG_CONTENT_QLAUDIO_MSG_FILEENDINGSALLOWED', implode(',', $strFilesAllowed));
+                $v->message .= '<br />' . Text::sprintf('PLG_CONTENT_QLAUDIO_MSG_FILEENDINGSALLOWED', implode(',', $strFilesAllowed));
                 $article->text = str_replace($v->string, $this->getHtml($k, $v), $article->text);
                 continue;
             }
@@ -142,7 +147,7 @@ class plgContentQlaudio extends JPlugin
     {
         ob_start();
         $params = $this->params;
-        $path = JPluginHelper::getLayoutPath('content', $this->_name, $data->states['layout']);
+        $path = PluginHelper::getLayoutPath('content', $this->_name, $data->states['layout']);
         require $path;
         $content = ob_get_contents();
         ob_end_clean();

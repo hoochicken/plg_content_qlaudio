@@ -7,6 +7,7 @@
  */
 
 //no direct access
+use Joomla\CMS\Language\Text;
 use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die ('Restricted Access');
@@ -67,7 +68,7 @@ $strDefault = '/';
         <source id="qlaudio_source<?php echo $counter; ?>"
                 src="<?php echo $strDefault; ?>" type="audio/mpeg"
         />
-        <?php echo JText::_('PLG_CONTENT_QLAUDIO_MSG_BROWSERDOESNTLIKEMEDIATAG'); ?>
+        <?php echo Text::_('PLG_CONTENT_QLAUDIO_MSG_BROWSERDOESNTLIKEMEDIATAG'); ?>
     </audio>
 </div>
 </div>
