@@ -88,14 +88,14 @@ class plgContentQlaudio extends CMSPlugin
         if ($context == 'com_finder.indexer') {
             return true;
         }
-
         // if no tags found => return
-        if (!$this->checkTags($article->text)) {
+		$matches = $this->checkTags($article->text);
+		if (!$matches) {
             return true;
         }
 
         // if no matches are found => return
-        if (!isset($this->matches[0]) && 0 >= $this->matches) {
+        if (!isset($matches[0]) && 0 === count($matches[0])) {
             return true;
         }
 
@@ -118,10 +118,15 @@ class plgContentQlaudio extends CMSPlugin
         }
 
         $this->setStates();
-        $this->setData();
+        $data = $this->setData($matches);
+		if (empty($data) || (array)$data === []) {
+			return;
+		}
+
+        // echo '<pre>'; print_r($data);die;
 
         // replace for folder
-        foreach ($this->data as $k => $v) {
+        foreach ($data as $k => $v) {
             $v->message = false;
             if (!isset($v->files) || 0 >= count($v->files)) {
                 $v->message = Text::sprintf('PLG_CONTENT_QLAUDIO_MSG_NOFILESINFOLDERFOUND', $v->states['folderRoot'] . '/' . $v->states['folder']);
@@ -167,17 +172,73 @@ class plgContentQlaudio extends CMSPlugin
     /**
      *
      */
-    private function setData()
+    private function setData(array $matches)
     {
-        $this->data = new stdClass();
-        foreach ($this->matches[0] as $k => $v) {
-            $this->data->$k = new stdClass();
-            $this->data->$k->string = $this->matches[0][$k];
+		$data = [];
+		//print_r($this->printer($matches));
+        foreach ($matches[0] as $k => $v) {
+			$tmp = new stdClass();
+            $tmp->string = $matches[0][$k];
+            $tmp->states = $this->states;
+			// print_r($this->states);
+            $regex = '/([a-z]*)="([^"]*)"/i';
+            preg_match_all($regex, $matches[1][$k], $attributes);
+            // $this->printer($attributes);
+            // $this->printer($this->data->$k);
+            foreach ($attributes[0] as $k2 => $v2) {
+                $key = $attributes[1][$k2];
+				$value = $attributes[2][$k2];
+                if ('filesAllowed' == $key) {
+                    $value = explode('|', $value);
+                }
+                if ('alterFileName' == $key) {
+                    $value = explode('|', $value);
+                }
+                $tmp->states[$key] = $value;
+            }
+            $filePath = $tmp->states['file'] ?? null;
+			// die($filePath);
+            if (!empty($filePath)) {
+                $filename = basename($filePath);
+                $fileData = [
+                    'path' => $filePath,
+                    'title' => $this->alterFilename($filename, $tmp->states['alterFileName'] ?? [], $tmp->states['filenameStrip'] ?? 0),
+                    'filename' => $filePath,
+                ];
+                $tmp->files = [$fileData];
+				$data[] = $tmp;
+                continue;
+            }
+
+            $folder = $tmp->states['folder'];
+			$folder = !empty($tmp->states['folderRoot']) ? sprintf('%s/%s', $tmp->states['folderRoot'], $folder) : $folder;
+            $folder = str_replace('//', '/', $folder);
+            $tmp->files = $this->getFilesFromFolder($folder, $tmp->states);
+            // $this->printer($this->data);die;
+            //$this->data->$k->files=$this->getFilesFromFolder($folder);
+            if (!is_countable($tmp->files) || 0 === count($tmp->files)) {
+                $data[] = $tmp;
+			    continue;
+            }
+            $tmp->files = $this->sortFiles($tmp->files, $tmp->states['ordering']);
+            $tmp->files = array_slice($tmp->files, 0, $tmp->states['limit']);
+			$data[] = $tmp;
+        }
+		return $data;
+    }
+
+    private function setDataArchive(array $matches)
+    {
+		$this->data = new stdClass();
+		//print_r($this->printer($matches));
+        foreach ($matches[0] as $k => $v) {
+			$this->data->$k = new stdClass();
+            $this->data->$k->string = $matches[0][$k];
             $this->data->$k->states = $this->states;
             $regex = '/([a-z]*)="([^"]*)"/i';
-            preg_match_all($regex, $this->matches[1][$k], $attributes);
-            //$this->printer($attributes);
-            //$this->printer($this->data->$k);
+            preg_match_all($regex, $matches[1][$k], $attributes);
+            // $this->printer($attributes);
+            // $this->printer($this->data->$k);
             foreach ($attributes[0] as $k2 => $v2) {
                 $key = $attributes[1][$k2];
                 $value = $attributes[2][$k2];
@@ -205,7 +266,7 @@ class plgContentQlaudio extends CMSPlugin
             $folder = !empty($this->data->$k->states['folderRoot']) ? $this->data->$k->states['folderRoot'] . $folder : $folder;
             $folder = str_replace('//', '/', $folder);
             $this->data->$k->files = $this->getFilesFromFolder($folder, $this->data->$k->states);
-            //$this->printer($this->data);die;
+            // $this->printer($this->data);die;
             //$this->data->$k->files=$this->getFilesFromFolder($folder);
             if (!is_countable($this->data->$k->files) || 0 === count($this->data->$k->files)) {
                 continue;
@@ -213,6 +274,7 @@ class plgContentQlaudio extends CMSPlugin
             $this->data->$k->files = $this->sortFiles($this->data->$k->files, $this->data->$k->states['ordering']);
             $this->data->$k->files = array_slice($this->data->$k->files, 0, $this->data->$k->states['limit']);
         }
+		return $this->data;
     }
 
     /**
@@ -334,14 +396,16 @@ class plgContentQlaudio extends CMSPlugin
      * @param $str
      * @return bool
      */
-    private function checkTags($str): bool
+    private function checkTags($str)
     {
         $return = false;
         $regex = '!{' . $this->str_call_start . '\s(.*?)}!';
-        if (false !== preg_match_all($regex, $str, $this->matches)) {
-            $return = true;
+
+		$foundSomething = preg_match_all($regex, $str, $matches);
+		if (false !== $foundSomething) {
+            $return = $matches;
         }
-        return $return;
+		return $return;
     }
 
     /**
