@@ -5,90 +5,112 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-jQuery(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function () {
 
     /**
+     * Get the list of audio filenames.
      *
-     * @param selectedItem
+     * @returns {string[]}
      */
-    function initiateFileList(selectedItem)
-    {
-        let fileListTemp = new Array;
-        jQuery('.qlaudio-item').each(function () {
-            // console.log(jQuery(this))
-            fileListTemp.push(jQuery(this).attr('data-filename'));
-        });
-        return fileListTemp;
+    function initiateFileList() {
+        return Array.from(document.querySelectorAll('.qlaudio-item'))
+            .map(item => item.dataset.filename);
     }
 
     const fileList = initiateFileList();
 
+    /**
+     * Load and play the next audio file.
+     */
     const loadNextFileAndPlay = () => {
-        let objAudioplayer = jQuery('.qlaudio').find('audio');
-        let currentAudio = objAudioplayer.find('source').attr('src');
-        let indexCurrent = fileList.indexOf(currentAudio);
-        let indexNew = indexCurrent < fileList.length && indexCurrent !== -1 ? indexCurrent + 1 : 0;
+        const audioPlayer = document.querySelector('.qlaudio audio');
 
-        objAudioplayer.src = fileList[indexNew];
-        objAudioplayer.find('source').attr('src', fileList[indexNew]);
-        if ('undefined' === typeof(objAudioplayer[0])) {
+        if (!audioPlayer || fileList.length === 0) {
             return;
         }
-        objAudioplayer[0].play();
+
+        const source = audioPlayer.querySelector('source');
+        const currentAudio = source ? source.getAttribute('src') : audioPlayer.src;
+
+        const indexCurrent = fileList.indexOf(currentAudio);
+        const indexNew =
+            indexCurrent !== -1 && indexCurrent < fileList.length - 1
+                ? indexCurrent + 1
+                : 0;
+
+        qlaudioSetIntoPlayer(audioPlayer, fileList[indexNew]);
     };
 
+    /**
+     * Initialize the audio player listener.
+     */
     function initiateAudioListener() {
-        let objAudioplayer = jQuery('.qlaudio').find('audio');
-        if ('undefined' === typeof(objAudioplayer[0])) {
+        const audioPlayer = document.querySelector('.qlaudio audio');
+
+        if (!audioPlayer) {
             return;
         }
-        objAudioplayer[0].addEventListener('ended', loadNextFileAndPlay);
+
+        audioPlayer.addEventListener('ended', loadNextFileAndPlay);
     }
 
     initiateAudioListener();
 
     /**
-     * Clicking an item in navigation = selecting an audio file
+     * Clicking an item in navigation selects an audio file.
      */
-    jQuery('body').on('click', '.qlaudio-item', function(el) {
-        // get current filename
-        let objItem = jQuery(el.currentTarget);
-        let strFilename = objItem.attr('data-filename');
-        let objAudioplayer = objItem.closest('.qlaudio').find('audio');
+    document.body.addEventListener('click', function (event) {
+        const selectedItem = event.target.closest('.qlaudio-item');
 
-        // get audio tag
-        qlaudioSetItemActive(jQuery(el.currentTarget))
-        qlaudioSetIntoPlayer(objAudioplayer, strFilename);
+        if (!selectedItem) {
+            return;
+        }
+
+        const filename = selectedItem.dataset.filename;
+        const audioPlayer = selectedItem.closest('.qlaudio')
+            ?.querySelector('audio');
+
+        if (!audioPlayer) {
+            return;
+        }
+
+        qlaudioSetItemActive(selectedItem);
+        qlaudioSetIntoPlayer(audioPlayer, filename);
     });
 
     /**
+     * Mark the selected item as active.
      *
-     * @param selectedItem
+     * @param {HTMLElement} selectedItem
      */
-    function qlaudioSetItemActive(selectedItem)
-    {
-        // add class active on item
-        selectedItem.siblings().removeClass('active');
-        selectedItem.addClass('active');
+    function qlaudioSetItemActive(selectedItem) {
+        selectedItem.parentElement
+            .querySelectorAll('.qlaudio-item.active')
+            .forEach(item => item.classList.remove('active'));
+
+        selectedItem.classList.add('active');
     }
 
     /**
-     * load audio files into player
-     * e. g. when clicking on item
+     * Load an audio file into the player and play it.
      *
-     * @param objAudioplayer
-     * @param strFilename
+     * @param {HTMLAudioElement} audioPlayer
+     * @param {string} filename
      */
-    function qlaudioSetIntoPlayer(objAudioplayer, strFilename)
-    {
-        // set new source, reload audio element and play
-        objAudioplayer.find('source').attr('src', strFilename);
-        if ('undefined' === typeof(objAudioplayer[0])) {
-            return;
+    function qlaudioSetIntoPlayer(audioPlayer, filename) {
+        const source = audioPlayer.querySelector('source');
+
+        if (source) {
+            source.setAttribute('src', filename);
+        } else {
+            audioPlayer.setAttribute('src', filename);
         }
-        objAudioplayer[0].load();
-        objAudioplayer[0].currentTime = 0;
-        objAudioplayer[0].play();
+
+        audioPlayer.load();
+        audioPlayer.currentTime = 0;
+        audioPlayer.play().catch(error => {
+            console.warn('Audio playback failed:', error);
+        });
     }
 
 });
